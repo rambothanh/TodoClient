@@ -55,10 +55,10 @@
         <div class="col mx-auto">
             <!-- Todo Item 1 -->
             <div class="row px-3 align-items-center todo-item rounded">
-                <div class="col-auto m-1 p-0 d-flex align-items-center">
+                <div class="col-auto m-1 p-0 d-flex align-items-center" @onclick="CheckDone">
                     <h2 class="m-0 p-0">
-                        <i class="fa fa-square-o text-primary btn m-0 p-0 d-none" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
-                        <i class="fa fa-check-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
+                        <i class="fa fa-square-o text-primary btn m-0 p-0 @(IsComplete ? "d-none" : "")" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
+                        <i class="fa fa-check-square-o text-primary btn m-0 p-0 @(IsComplete ? "" : "d-none")" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
                     </h2>
                 </div>
                 <div class="col px-1 m-1 d-flex align-items-center">
@@ -88,6 +88,8 @@
             <div class="row px-3 align-items-center todo-item rounded">
                 <div class="col-auto m-1 p-0 d-flex align-items-center">
                     <h2 class="m-0 p-0">
+                        <!-- Thêm class d-none sẽ ẩn đi và ngược lại-->
+                        <!-- data-toggle="tooltip" sẽ hiện title khi di chuột đến -->
                         <i class="fa fa-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
                         <i class="fa fa-check-square-o text-primary btn m-0 p-0 d-none" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
                     </h2>
@@ -158,5 +160,9 @@
 
 
 @code {
-
+    private bool IsComplete { get; set; } = false;
+    private void CheckDone(MouseEventArgs e)
+    {
+        IsComplete = !IsComplete;
+    }
 }
