@@ -17,7 +17,7 @@ namespace TodoClient
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-
+            //builder.Services.AddAuthorizationCore();
             //Add BaseAddress 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://todoapi.sofsog.com/api/") });
 
