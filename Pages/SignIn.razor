@@ -1,5 +1,5 @@
 @page "/signin"
-@inject HttpClient Http
+@inject IAuthenticationService Auth
 
 <EditForm Model="@signIn" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -21,7 +21,7 @@
     private AuthenticateModel signIn = new AuthenticateModel();
     private async Task HandleValidSubmit()
     {
-       var respone = await Http.PostAsJsonAsync("/api/Users/authenticate", signIn);
+       var respone = await Auth.Login(signIn);
        Console.WriteLine(respone);
     }
 }
