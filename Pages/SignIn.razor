@@ -1,28 +1,37 @@
-@page "/signin"
+﻿@page "/signin"
 @inject IAuthenticationService Auth
 
-<EditForm Model="@signIn" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    
-    <div class="form-group">
-        <label for="username">User name:</label>
-        <InputText class="form-control" id="username" @bind-Value="signIn.Username"  placeholder="User name" />
+<div class="container m-5 p-2 rounded mx-auto bg-light shadow">
+    <h4 class="card-header">Login</h4>
+    <div class="card-body">
+        <EditForm Model="@signIn" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="username">User name:</label>
+                <InputText class="form-control" id="username" @bind-Value="signIn.Username" placeholder="User name" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <InputText type="password" class="form-control" id="password" @bind-Value="signIn.Password" placeholder="Password" />
+            </div>
+
+            <button disabled="@loading" type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
     </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <InputText type="password" class="form-control" id="password" @bind-Value="signIn.Password"  placeholder="Password" />
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+</div>
 
 @code{
     private AuthenticateModel signIn = new AuthenticateModel();
+    private bool loading;
     private async Task HandleValidSubmit()
     {
-       var respone = await Auth.Login(signIn);
-       Console.WriteLine(respone);
+        loading = true;
+        var r = await Auth.Login(signIn);
+        //Chuyển hướng sang trang vừa nảy hoặc trang mặc định
+
+        loading = false;
     }
 }
 

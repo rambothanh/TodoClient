@@ -25,7 +25,7 @@
                     <i class="fa fa-calendar-times-o my-2 px-1 text-danger btn clear-due-date-button d-none" data-toggle="tooltip" data-placement="bottom" title="Clear Due date"></i>
                 </div>
                 <div class="col-auto px-0 mx-0 mr-2">
-                    <button @onclick="@AddItem" type="button" class="btn btn-primary">Add</button>
+                    <button disabled="@loading" @onclick="@AddItem" type="button" class="btn btn-primary">Add</button>
                 </div>
             </div>
         </div>
@@ -63,10 +63,10 @@
         @foreach (var todoItem in todoItems)
         {
             
-            <div class="row mx-1 px-5 pb-3 w-80">
+            <div class="@(todoItem.Deleted?"d-none":"") row mx-1 px-5 pb-3 w-80 ">
             <div class="col mx-auto">
                 <!-- Todo Item 1 -->
-                    <div class="row px-3 align-items-center todo-item rounded @(todoItem.Editing?"editing":"")">
+                    <div class=" row px-3 align-items-center todo-item rounded @(todoItem.Editing?"editing":"")">
                         <!-- Checkbox icon -->
                         <div class="col-auto m-1 p-0 d-flex align-items-center" @onclick="()=>CheckDone(todoItem)">
                             <h2 class="m-0 p-0">
@@ -117,42 +117,43 @@
 
 
 @code {
-    //private bool IsComplete { get; set; } = false;
+    //private bool Deleted { get; set; } = false;
     //private string NewUpdateName { get; set; }
     //private ElementReference[] ImputRef { get; set; }
+
     private TodoItemDTO[] todoItems;
     private string NewItemName { get; set; }
-    
+    private bool loading;
     private async Task DeleteItem(TodoItemDTO todoItem){
+        todoItem.Deleted = true;
         await Http.DeleteAsync($"TodoItems/{todoItem.Id}");
-        await OnInitializedAsync();
-        
-        
+        //await OnInitializedAsync();
     }
-    
+
     private async Task AddItem(){
+        loading = true;
         var addItem = new TodoItemDTO { Name = NewItemName};
         await Http.PostAsJsonAsync("TodoItems", addItem);
         await OnInitializedAsync();
         NewItemName = "";
-        
+        loading = false;
     }
 
     protected override async Task OnInitializedAsync(){
         todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
     }
-        
+
 
     private async Task CheckDone(TodoItemDTO todoItem)
     {
         todoItem.IsComplete = !todoItem.IsComplete;
-        await Http.PutAsJsonAsync($"TodoItems/{todoItem.Id}", todoItem); 
+        await Http.PutAsJsonAsync($"TodoItems/{todoItem.Id}", todoItem);
     }
 
     private async Task StopEdit(TodoItemDTO todoItem){
         todoItem.Editing= false;
         await Http.PutAsJsonAsync($"TodoItems/{todoItem.Id}", todoItem);
-        
+
     }
     private void  Edit(TodoItemDTO todoItem)
     {
