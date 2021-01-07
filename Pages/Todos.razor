@@ -1,5 +1,5 @@
 ﻿@page "/todos"
-@inject IJSRuntime JSRuntime
+@* @inject IJSRuntime JSRuntime *@
 
 <div class="container m-5 p-2 rounded mx-auto bg-light shadow">
     <!-- App title section -->
@@ -56,47 +56,17 @@
         <div class="col mx-auto">
             <!-- Todo Item 1 -->
             <div class="row px-3 align-items-center todo-item rounded @(editing?"editing":"")">
+                <!-- Checkbox icon -->
                 <div class="col-auto m-1 p-0 d-flex align-items-center" @onclick="CheckDone">
                     <h2 class="m-0 p-0">
                         <i class="fa text-primary btn m-0 p-0 @(IsComplete ? "fa-check-square-o" : "fa-square-o")" data-toggle="tooltip" data-placement="bottom" title="@(IsComplete ? "Mark as todo" : "Mark as complete")"></i>
                     </h2>
                 </div>
+                <!-- Content todo input -->
                 <div class="col px-1 m-1 d-flex align-items-center">
                     <input style="@(IsComplete ? "text-decoration-line: line-through" : "")" @ref="textInput" @onfocusout="@(e=>editing=!editing)" readonly=@(!editing) type="text" class="@(editing?"":"bg-transparent") form-control form-control-lg border-0 edit-todo-input  rounded px-3" value="Buy groceries for next week" title="Buy groceries for next week" />
                 </div>
-                <div class="col-auto m-1 p-0 px-3 d-none">
-                </div>
-                <div class="col-auto m-1 p-0 todo-actions">
-                    <div class="row d-flex align-items-center justify-content-end">
-                        <h5 class="m-0 p-0 px-2">
-                            <i @onclick="Edit" class="@(editing?"d-none":"") fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
-                        </h5>
-                        <h5 class="m-0 p-0 px-2">
-                            <i class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
-                        </h5>
-                    </div>
-                    <div class="row todo-created-info">
-                        <div class="col-auto d-flex align-items-center pr-2">
-                            <i class="fa fa-info-circle my-2 px-2 text-black-50 btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Created date"></i>
-                            <label class="date-label my-2 text-black-50">28th Jun 2020</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Todo Item 2 -->
-            <div class="row px-3 align-items-center todo-item rounded">
-                <div class="col-auto m-1 p-0 d-flex align-items-center">
-                    <h2 class="m-0 p-0">
-                        <!-- Thêm class d-none sẽ ẩn đi và ngược lại-->
-                        <!-- data-toggle="tooltip" sẽ hiện title khi di chuột đến -->
-                        <i class="fa fa-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
-                        <i class="fa fa-check-square-o text-primary btn m-0 p-0 d-none" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
-                    </h2>
-                </div>
-                <div class="col px-1 m-1 d-flex align-items-center">
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input bg-transparent rounded px-3" readonly value="Renew car insurance" title="Renew car insurance" />
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input rounded px-3 d-none" value="Renew car insurance" />
-                </div>
+                <!-- Due Date-->
                 <div class="col-auto m-1 p-0 px-3">
                     <div class="row">
                         <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
@@ -105,41 +75,11 @@
                         </div>
                     </div>
                 </div>
+                <!-- Action-->
                 <div class="col-auto m-1 p-0 todo-actions">
                     <div class="row d-flex align-items-center justify-content-end">
                         <h5 class="m-0 p-0 px-2">
-                            <i class="fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
-                        </h5>
-                        <h5 class="m-0 p-0 px-2">
-                            <i class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
-                        </h5>
-                    </div>
-                    <div class="row todo-created-info">
-                        <div class="col-auto d-flex align-items-center pr-2">
-                            <i class="fa fa-info-circle my-2 px-2 text-black-50 btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Created date"></i>
-                            <label class="date-label my-2 text-black-50">28th Jun 2020</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Todo Item 3 -->
-            <div class="row px-3 align-items-center todo-item editing rounded">
-                <div class="col-auto m-1 p-0 d-flex align-items-center">
-                    <h2 class="m-0 p-0">
-                        <i class="fa fa-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
-                        <i class="fa fa-check-square-o text-primary btn m-0 p-0 d-none" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
-                    </h2>
-                </div>
-                <div class="col px-1 m-1 d-flex align-items-center">
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input bg-transparent rounded px-3 d-none" readonly value="Sign up for online course" title="Sign up for online course" />
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input rounded px-3" value="Sign up for online course" />
-                </div>
-                <div class="col-auto m-1 p-0 px-3 d-none">
-                </div>
-                <div class="col-auto m-1 p-0 todo-actions">
-                    <div class="row d-flex align-items-center justify-content-end">
-                        <h5 class="m-0 p-0 px-2 edit-icon">
-                            <i class="fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
+                            <i @onclick="Edit" class="@(editing?"d-none":"") fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
                         </h5>
                         <h5 class="m-0 p-0 px-2">
                             <i class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
@@ -171,14 +111,6 @@
     {
         editing = !editing;
         textInput.FocusAsync();
-
-
     }
-    //protected override async Task OnAfterRenderAsync(bool first)
-    //{
-    //    if (first)
-    //    {
-    //        await textInput.FocusAsync();
-    //    }
-    //}
+
 }
