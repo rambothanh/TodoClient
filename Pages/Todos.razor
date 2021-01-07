@@ -95,7 +95,7 @@
                                     <i @onclick="()=>Edit(todoItem)" class="@(todoItem.Editing?"d-none":"") fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
                                 </h5>
                                 <h5 class="m-0 p-0 px-2">
-                                    <i class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
+                                    <i @onclick="()=>DeleteItem(todoItem)" class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
                                 </h5>
                             </div>
                             <div class="row todo-created-info">
@@ -117,15 +117,25 @@
 
 
 @code {
-    private bool IsComplete { get; set; } = false;
+    //private bool IsComplete { get; set; } = false;
     //private string NewUpdateName { get; set; }
     //private ElementReference[] ImputRef { get; set; }
     private TodoItemDTO[] todoItems;
     private string NewItemName { get; set; }
+    
+    private async Task DeleteItem(TodoItemDTO todoItem){
+        await Http.DeleteAsync($"TodoItems/{todoItem.Id}");
+        await OnInitializedAsync();
+        
+        
+    }
+    
     private async Task AddItem(){
         var addItem = new TodoItemDTO { Name = NewItemName};
         await Http.PostAsJsonAsync("TodoItems", addItem);
+        await OnInitializedAsync();
         NewItemName = "";
+        
     }
 
     protected override async Task OnInitializedAsync(){
@@ -141,12 +151,12 @@
 
     private async Task StopEdit(TodoItemDTO todoItem){
         todoItem.Editing= false;
-        await Http.PutAsJsonAsync($"TodoItems/{todoItem.Id}", todoItem); 
+        await Http.PutAsJsonAsync($"TodoItems/{todoItem.Id}", todoItem);
+        
     }
-    private async Task Edit(TodoItemDTO todoItem)
+    private void  Edit(TodoItemDTO todoItem)
     {
         todoItem.Editing = !todoItem.Editing;
-        
         //ImputRef[todoItem.Id].FocusAsync();
     }
 
