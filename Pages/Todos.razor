@@ -143,6 +143,7 @@
 
     protected override async Task OnInitializedAsync(){
         Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",Auth.User.Token);
+        currentFirstName = Auth.User.FirstName;
       todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
        @* if(Http.DefaultRequestHeaders.Authorization!=null){
            var currentUser = await Auth.CurrentUser();
