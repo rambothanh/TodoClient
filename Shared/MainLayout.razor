@@ -1,20 +1,42 @@
 ﻿@inherits LayoutComponentBase
+@inject IAuthenticationService Auth
+@inject NavigationManager Navi
+
+
 
 <div class="page">
-    <div class="sidebar">
+    @* <div class="sidebar">
         <NavMenu />
-    </div>
-
+    </div> *@
+    @if (LoggedIn)
+    {
     <div class="main">
-        <div class="top-row px-4">
-            <a href="/signin" target="signin" class="ml-md-auto">Login</a>
-            <a href="/register" target="register" class="ml-md-auto">Register</a>
+            <div class="top-row px-4">
+                <p>User: @firstName</p>
+                <a @onclick="Logout" href="Signin" target="Signin" class="ml-md-auto">Logout</a>
+            </div>
+            <div class="content px-4">
+                @Body
+            </div>
         </div>
-        <div class="content px-4">
-            @Body
-        </div>
-    </div>
+    }else{
+        Navi.NavigateTo("signin");
+    }
+   
 </div>
-@code{
-    
+
+@code {
+    private string firstName;
+    public bool LoggedIn 
+    {
+        get { return Auth.User != null; }
+    }
+    protected override async Task OnInitializedAsync(){
+        if(LoggedIn)
+            firstName = Auth.User.FirstName;
+    }
+    public async Task Logout(){
+      await Auth.Logout();
+    }
+
 }

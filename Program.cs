@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TodoClient.Services.AuthenticationService;
+using TodoClient.Models;
+
 
 
 namespace TodoClient
@@ -25,7 +27,11 @@ namespace TodoClient
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
-            await builder.Build().RunAsync();
+            
+            var host = builder.Build();
+            var accountService = host.Services.GetRequiredService<IAuthenticationService>();
+            await accountService.Initialize();
+            await host.RunAsync();
         }
     }
 }

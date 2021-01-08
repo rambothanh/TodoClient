@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text;
 using TodoClient.Helpers;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Components;
 
 namespace TodoClient.Services.AuthenticationService
 {
@@ -16,11 +17,18 @@ namespace TodoClient.Services.AuthenticationService
         private readonly HttpClient Http;
         //private readonly AuthenticationStateProvider _authStateProvider;
         private readonly ILocalStorageService _localStorage;
-        public AuthenticationService(HttpClient client, ILocalStorageService localStorage)
+        private NavigationManager _navi;
+        private string userKeyInLocal ="user";
+        public AuthResponseDto User { get; private set; }
+
+        public AuthenticationService(HttpClient client, 
+        ILocalStorageService localStorage,
+        NavigationManager navi)
         {
             Http = client;
             //_authStateProvider = authStateProvider;
             _localStorage = localStorage;
+            _navi = navi;
         }
 
         public async Task<AuthResponseDto> Login(AuthenticateModel userForAuthentication)
@@ -40,7 +48,7 @@ namespace TodoClient.Services.AuthenticationService
             result.IsAuthSuccessful = true;
             //Lưu trữ Token và toàn bộ đối tượng User vào vào localStorage
             await _localStorage.SetItemAsync("authToken", result.Token);
-            await _localStorage.SetItemAsync("user", result);
+            await _localStorage.SetItemAsync(userKeyInLocal, result);
             
             //Thêm xác nhận Token vào Header mặc định của Http 
             Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
@@ -62,8 +70,21 @@ namespace TodoClient.Services.AuthenticationService
             var token = await _localStorage.GetItemAsync<string>("authToken");
             if(string.IsNullOrWhiteSpace(token))
                 return new AuthResponseDto{IsAuthSuccessful=false};
-            var result = await _localStorage.GetItemAsync<AuthResponseDto>("user");
+            var result = await _localStorage.GetItemAsync<AuthResponseDto>(userKeyInLocal);
             return result;
         }
+        public async Task Initialize()
+        {
+            User = await _localStorage.GetItemAsync<AuthResponseDto>(userKeyInLocal);
+            
+        }
+
+        public async Task Logout()
+        {
+            User = null;
+            await _localStorage.RemoveItemAsync(userKeyInLocal);
+            _navi.NavigateTo("signin");
+        }
+
     }
 }

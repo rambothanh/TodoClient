@@ -4,9 +4,11 @@ namespace TodoClient.Services.AuthenticationService
 {
     public interface IAuthenticationService
     {
+        AuthResponseDto User { get; }
         Task<AuthResponseDto> RegisterUser(RegisterModel userForRegistration);
         Task<AuthResponseDto> Login(AuthenticateModel userForAuthentication);
         Task<AuthResponseDto> CurrentUser();
-        //Task Logout();
+        Task Initialize();
+        Task Logout();
     }
 }

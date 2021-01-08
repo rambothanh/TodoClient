@@ -1,4 +1,5 @@
 ﻿@page "/signin"
+@layout SiginLayout
 @inject IAuthenticationService Auth
 @inject NavigationManager NavigationManager
 
@@ -18,7 +19,7 @@
                 <InputText type="password" class="form-control" id="password" @bind-Value="signIn.Password" placeholder="Password" />
             </div>
 
-            <button disabled="@loading" type="submit" class="btn btn-primary">Submit</button>
+            <button disabled="@loading" type="submit" class="btn btn-primary">Login</button>
             
         </EditForm>
     </div>
@@ -32,13 +33,14 @@
     {
         loading = true;
         var authResponse = await Auth.Login(signIn);
+        await Auth.Initialize();
         loading = false;
         if(authResponse.IsAuthSuccessful)
             //Chuyển hướng sang trang todos
             NavigationManager.NavigateTo("todos");
         //Thông báo lỗi
         message =authResponse.Message;
-        Console.WriteLine(authResponse.Message);
+        //Console.WriteLine(authResponse.Message);
     }
 }
 

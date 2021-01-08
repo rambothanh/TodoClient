@@ -142,12 +142,14 @@
     }
 
     protected override async Task OnInitializedAsync(){
-       
-       if(Http.DefaultRequestHeaders.Authorization!=null){
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",Auth.User.Token);
+      todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
+       @* if(Http.DefaultRequestHeaders.Authorization!=null){
            var currentUser = await Auth.CurrentUser();
-           currentFirstName = currentUser.FirstName;
+           currentFirstName = Auth.User.FirstName;
            todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
        }else {
+           
             var currentUser = await Auth.CurrentUser();
             if(!currentUser.IsAuthSuccessful){
                 NavigationManager.NavigateTo("SignIn");
@@ -157,7 +159,7 @@
                 currentFirstName = currentUser.FirstName;
                 todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
             }
-       }
+       } *@
     }
 
 
