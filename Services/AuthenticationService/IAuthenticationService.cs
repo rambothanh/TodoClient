@@ -6,6 +6,7 @@ namespace TodoClient.Services.AuthenticationService
     {
         Task<AuthResponseDto> RegisterUser(RegisterModel userForRegistration);
         Task<AuthResponseDto> Login(AuthenticateModel userForAuthentication);
+        Task<AuthResponseDto> CurrentUser();
         //Task Logout();
     }
 }

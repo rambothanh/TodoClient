@@ -37,12 +37,15 @@ namespace TodoClient.Services.AuthenticationService
             //trong đó chỉ chứa Message báo lỗi và IsAuthSuccessful=false
             if (!respone.IsSuccessStatusCode)
                 return result;
-            //Lưu trữ Token vào localStorage
+            result.IsAuthSuccessful = true;
+            //Lưu trữ Token và toàn bộ đối tượng User vào vào localStorage
             await _localStorage.SetItemAsync("authToken", result.Token);
+            await _localStorage.SetItemAsync("user", result);
+            
             //Thêm xác nhận Token vào Header mặc định của Http 
             Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
             //Trả về Oject AuthResponseDto chứa xác nhận thành công
-            return new AuthResponseDto { IsAuthSuccessful = true };
+            return result;
             //
             //((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Email);
         }
@@ -54,6 +57,13 @@ namespace TodoClient.Services.AuthenticationService
                 return new AuthResponseDto { Message = $"Username {userForRegistration.Username} is already taken" };
             
             return new AuthResponseDto { IsAuthSuccessful = true };
+        }
+        public async Task<AuthResponseDto> CurrentUser(){
+            var token = await _localStorage.GetItemAsync<string>("authToken");
+            if(string.IsNullOrWhiteSpace(token))
+                return new AuthResponseDto{IsAuthSuccessful=false};
+            var result = await _localStorage.GetItemAsync<AuthResponseDto>("user");
+            return result;
         }
     }
 }

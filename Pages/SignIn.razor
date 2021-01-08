@@ -1,5 +1,6 @@
 ﻿@page "/signin"
 @inject IAuthenticationService Auth
+@inject NavigationManager NavigationManager
 
 <div class="container m-5 p-2 rounded mx-auto bg-light shadow">
     <h4 class="card-header">Login</h4>
@@ -7,7 +8,7 @@
         <EditForm Model="@signIn" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
-
+            <p class="text-danger @((message!=null)?"":"d-none")">@message</p>
             <div class="form-group">
                 <label for="username">User name:</label>
                 <InputText class="form-control" id="username" @bind-Value="signIn.Username" placeholder="User name" />
@@ -18,6 +19,7 @@
             </div>
 
             <button disabled="@loading" type="submit" class="btn btn-primary">Submit</button>
+            
         </EditForm>
     </div>
 </div>
@@ -25,13 +27,18 @@
 @code{
     private AuthenticateModel signIn = new AuthenticateModel();
     private bool loading;
+    private string message;
     private async Task HandleValidSubmit()
     {
         loading = true;
-        var r = await Auth.Login(signIn);
-        //Chuyển hướng sang trang vừa nảy hoặc trang mặc định
-
+        var authResponse = await Auth.Login(signIn);
         loading = false;
+        if(authResponse.IsAuthSuccessful)
+            //Chuyển hướng sang trang todos
+            NavigationManager.NavigateTo("todos");
+        //Thông báo lỗi
+        message =authResponse.Message;
+        Console.WriteLine(authResponse.Message);
     }
 }
 
