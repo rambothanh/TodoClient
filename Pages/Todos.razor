@@ -1,9 +1,11 @@
-﻿@page "/todos"
+﻿@page "/"
+@page "/todos"
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject ILocalStorageService _localStorage
 @inject NavigationManager NavigationManager
 @inject IAuthenticationService Auth
+
 
 <div class="container m-5 p-2 rounded mx-auto bg-light shadow">
     <!-- App title section -->
@@ -62,13 +64,13 @@
     }
     else
     {
-        
+
         @foreach (var todoItem in todoItems)
         {
-            
+            <hr align="center" />
             <div class="@(todoItem.Deleted?"d-none":"") row mx-1 px-5 pb-3 w-80 ">
-            <div class="col mx-auto">
-                <!-- Todo Item 1 -->
+                <div class="col mx-auto">
+                    <!-- Todo Item 1 -->
                     <div class=" row px-3 align-items-center todo-item rounded @(todoItem.Editing?"editing":"")">
                         <!-- Checkbox icon -->
                         <div class="col-auto m-1 p-0 d-flex align-items-center" @onclick="()=>CheckDone(todoItem)">
@@ -78,9 +80,9 @@
                         </div>
                         <!-- Content todo input -->
                         <div class="col px-1 m-1 d-flex align-items-center">
-                            <input style="@(todoItem.IsComplete ? "text-decoration-line: line-through" : "text-decoration-line: false")" @onfocusout="@(()=>StopEdit(todoItem))" readonly=@(!todoItem.Editing) 
-                            type="text" class="@(todoItem.Editing?"":"bg-transparent") form-control form-control-lg border-0 edit-todo-input  rounded px-3"
-                            @bind="@todoItem.Name" title="Buy groceries for next week" />
+                            <input style="@(todoItem.IsComplete ? "text-decoration-line: line-through" : "text-decoration-line: false")" @onfocusout="@(()=>StopEdit(todoItem))" readonly=@(!todoItem.Editing)
+                                   type="text" class="@(todoItem.Editing?"":"bg-transparent") form-control form-control-lg border-0 edit-todo-input  rounded px-3"
+                                   @bind="@todoItem.Name" title="Buy groceries for next week" />
                         </div>
                         <!-- Due Date-->
                         <div class="col-auto m-1 p-0 px-3">
@@ -109,60 +111,45 @@
                             </div>
                         </div>
                     </div>
-                </div> 
-            </div>  
+                </div>
+            </div>
         }
-        
+
     }
-    
 </div>
 
 @code {
     //private bool Deleted { get; set; } = false;
     //private string NewUpdateName { get; set; }
     //private ElementReference[] ImputRef { get; set; }
-
+  
     private TodoItemDTO[] todoItems;
     private string NewItemName { get; set; }
     private bool loading;
-    private string currentFirstName ="Anonymous";
-    private async Task DeleteItem(TodoItemDTO todoItem){
+    private string currentFirstName = "Anonymous";
+    private async Task DeleteItem(TodoItemDTO todoItem)
+    {
         todoItem.Deleted = true;
         await Http.DeleteAsync($"TodoItems/{todoItem.Id}");
         //await OnInitializedAsync();
     }
 
-    private async Task AddItem(){
+    private async Task AddItem()
+    {
         loading = true;
-        var addItem = new TodoItemDTO { Name = NewItemName};
+        var addItem = new TodoItemDTO { Name = NewItemName };
         await Http.PostAsJsonAsync("TodoItems", addItem);
         await OnInitializedAsync();
         NewItemName = "";
         loading = false;
     }
 
-    protected override async Task OnInitializedAsync(){
-        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",Auth.User.Token);
+    protected override async Task OnInitializedAsync()
+    {
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Auth.User.Token);
         currentFirstName = Auth.User.FirstName;
-      todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
-       @* if(Http.DefaultRequestHeaders.Authorization!=null){
-           var currentUser = await Auth.CurrentUser();
-           currentFirstName = Auth.User.FirstName;
-           todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
-       }else {
-           
-            var currentUser = await Auth.CurrentUser();
-            if(!currentUser.IsAuthSuccessful){
-                NavigationManager.NavigateTo("SignIn");
-            }else
-            {
-                Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",currentUser.Token);
-                currentFirstName = currentUser.FirstName;
-                todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
-            }
-       } *@
+        todoItems = await Http.GetFromJsonAsync<TodoItemDTO[]>("TodoItems");
     }
-
 
     private async Task CheckDone(TodoItemDTO todoItem)
     {
@@ -170,12 +157,13 @@
         await Http.PutAsJsonAsync($"TodoItems/{todoItem.Id}", todoItem);
     }
 
-    private async Task StopEdit(TodoItemDTO todoItem){
-        todoItem.Editing= false;
+    private async Task StopEdit(TodoItemDTO todoItem)
+    {
+        todoItem.Editing = false;
         await Http.PutAsJsonAsync($"TodoItems/{todoItem.Id}", todoItem);
 
     }
-    private void  Edit(TodoItemDTO todoItem)
+    private void Edit(TodoItemDTO todoItem)
     {
         todoItem.Editing = !todoItem.Editing;
         //ImputRef[todoItem.Id].FocusAsync();

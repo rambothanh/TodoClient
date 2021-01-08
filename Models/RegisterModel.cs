@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TodoClient.Models {
+namespace TodoClient.Models
+{
     public class RegisterModel
     {
         [Required]
@@ -14,6 +15,7 @@ namespace TodoClient.Models {
 
         [Required]
         public string Password { get; set; }
+
         [Required]
         public string Role { get; set; }
     }

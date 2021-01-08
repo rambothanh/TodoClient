@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-namespace TodoClient.Models {
-     public class AuthenticateModel
+
+namespace TodoClient.Models
+{
+    public class AuthenticateModel
     {
         [Required]
         public string Username { get; set; }

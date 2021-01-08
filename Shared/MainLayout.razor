@@ -2,41 +2,43 @@
 @inject IAuthenticationService Auth
 @inject NavigationManager Navi
 
-
-
 <div class="page">
     @* <div class="sidebar">
-        <NavMenu />
-    </div> *@
+            <NavMenu />
+        </div> *@
     @if (LoggedIn)
     {
-    <div class="main">
+        <div class="main">
             <div class="top-row px-4">
-                <p>User: @firstName</p>
-                <a @onclick="Logout" href="Signin" target="Signin" class="ml-md-auto">Logout</a>
+
+                <span style="margin: 30px; " class="badge badge-secondary">Hi! @firstName</span>
+                <button @onclick="Logout" href="Signin" type="button" class="btn btn-outline-secondary">Logout</button>
             </div>
             <div class="content px-4">
                 @Body
             </div>
         </div>
-    }else{
+    }
+    else
+    {
         Navi.NavigateTo("signin");
     }
-   
 </div>
 
 @code {
     private string firstName;
-    public bool LoggedIn 
+    public bool LoggedIn
     {
         get { return Auth.User != null; }
     }
-    protected override async Task OnInitializedAsync(){
-        if(LoggedIn)
+    protected override async Task OnInitializedAsync()
+    {
+        if (LoggedIn)
             firstName = Auth.User.FirstName;
     }
-    public async Task Logout(){
-      await Auth.Logout();
+    public async Task Logout()
+    {
+        await Auth.Logout();
     }
 
 }

@@ -1,17 +1,11 @@
 using Blazored.LocalStorage;
+
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using TodoClient.Services.AuthenticationService;
-using TodoClient.Models;
-
-
 
 namespace TodoClient
 {
@@ -22,12 +16,13 @@ namespace TodoClient
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
             //builder.Services.AddAuthorizationCore();
-            //Add BaseAddress 
+            //Add BaseAddress
+            
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://todoapi.sofsog.com/api/") });
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
-            builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
-            
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
             var host = builder.Build();
             var accountService = host.Services.GetRequiredService<IAuthenticationService>();
             await accountService.Initialize();
