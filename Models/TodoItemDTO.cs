@@ -1,4 +1,6 @@
-﻿namespace TodoClient.Models
+﻿using System;
+
+namespace TodoClient.Models
 {
     public class TodoItemDTO
     {
@@ -7,5 +9,9 @@
         public bool IsComplete { get; set; } = false;
         public bool Editing { get; set; } = false;
         public bool Deleted { get; set; } = false;
+        public DateTime? DateCreate { set; get; }
+        public DateTime? DateDue { set; get; }
+
+
     }
 }

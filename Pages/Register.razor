@@ -2,6 +2,7 @@
 @layout SiginLayout
 @inject IAuthenticationService Auth
 @inject NavigationManager NavigationManager
+
     <div class="container m-5 p-2 rounded mx-auto bg-light shadow">
         <h4 class="card-header">Register</h4>
         <div class="card-body">
@@ -25,10 +26,7 @@
                 <label for="password">Password:</label>
                 <InputText type="password" class="form-control" id="password" @bind-Value="register.Password" placeholder="Password" />
             </div>
-            <div class="form-group">
-                <label for="role">Role:</label>
-                <InputText class="form-control" id="role" @bind-Value="register.Role" placeholder="Role" />
-            </div>
+           
             <button disabled="@loading" type="submit" class="btn btn-primary">Submit</button>
         </EditForm>
         </div>
