@@ -9,9 +9,8 @@ namespace TodoClient.Models
         public bool IsComplete { get; set; } = false;
         public bool Editing { get; set; } = false;
         public bool Deleted { get; set; } = false;
-        public DateTime? DateCreate { set; get; }
+        public DateTime? DateCreate { set; get; } = DateTime.UtcNow.AddHours(7);
         public DateTime? DateDue { set; get; }
-
 
     }
 }

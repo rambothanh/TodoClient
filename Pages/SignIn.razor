@@ -3,6 +3,7 @@
 @inject IAuthenticationService Auth
 @inject NavigationManager NavigationManager
 
+
 <div class="container m-5 p-2 rounded mx-auto bg-light shadow">
     <h4 class="card-header">Login</h4>
     <div class="card-body">
@@ -21,8 +22,11 @@
 
             <button disabled="@loading" type="submit" class="btn btn-primary">Login</button>
         </EditForm>
+
     </div>
 </div>
+
+
 
 @code{
     private AuthenticateModel signIn = new AuthenticateModel();
@@ -34,11 +38,11 @@
         var authResponse = await Auth.Login(signIn);
         await Auth.Initialize();
         loading = false;
-        if(authResponse.IsAuthSuccessful)
+        if (authResponse.IsAuthSuccessful)
             //Chuyển hướng sang trang todos
             NavigationManager.NavigateTo("todos");
         //Thông báo lỗi
-        message =authResponse.Message;
+        message = authResponse.Message;
         //Console.WriteLine(authResponse.Message);
     }
 }

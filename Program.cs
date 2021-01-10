@@ -22,7 +22,7 @@ namespace TodoClient
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-
+            
             var host = builder.Build();
             var accountService = host.Services.GetRequiredService<IAuthenticationService>();
             await accountService.Initialize();

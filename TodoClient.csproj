@@ -5,6 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AntDesign" Version="0.4.1" />
 		<PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
 		<!--how to use: https://www.matblazor.com/-->
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.1" />
