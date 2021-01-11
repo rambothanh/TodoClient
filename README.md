@@ -1,7 +1,7 @@
 # TodoClient
 ## Feature: Call a web API from ASP.NET Core Blazor WebAssembly to:
 #### Register, Login, Logout
-#### Create, Read, Update, Delete, Check complete To-dos, Due date of To-dos.
+#### Create, Read, Update, Delete, Mark as complete To-dos, Due date of To-dos.
 
 ## Technology
 #### ASP .Net 5, Plazor WebAssembly
