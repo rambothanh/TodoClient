@@ -10,4 +10,6 @@
 #### Link My API service: https://todoapi.sofsog.com/swagger/index.html  
 ## Documentation:
 ##### Clone or download
-##### dotnet build, dotnet run
+##### dotnet build 
+##### dotnet run
+##### In brower: http://localhost:5000/
